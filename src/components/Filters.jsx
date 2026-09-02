@@ -9,9 +9,27 @@ export default function Filters({
   onCategory,
   onPaidBy,
 }) {
+  const hasActiveFilters = query.trim() !== "" || category !== "All" || paidBy !== "";
+
   return (
     <section className="card">
-      <h2>Filter</h2>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+        <h2 style={{ margin: 0 }}>Filter</h2>
+        {hasActiveFilters && (
+          <button
+            type="button"
+            className="btn ghost"
+            style={{ padding: "4px 10px", fontSize: 12 }}
+            onClick={() => {
+              onQuery("");
+              onCategory("All");
+              onPaidBy("");
+            }}
+          >
+            Reset filters
+          </button>
+        )}
+      </div>
       <div className="row">
         <div className="field">
           <label htmlFor="search">Search</label>

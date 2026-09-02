@@ -31,12 +31,20 @@ export default function App() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return state.expenses.filter((e) => {
-      if (q && !e.description.toLowerCase().includes(q)) return false;
+      const payer = state.members.find((m) => String(m.id) === String(e.paidBy));
+      const payerName = payer ? payer.name.toLowerCase() : "";
+      const matchesQuery =
+        !q ||
+        e.description.toLowerCase().includes(q) ||
+        (e.category && e.category.toLowerCase().includes(q)) ||
+        payerName.includes(q);
+
+      if (!matchesQuery) return false;
       if (category !== "All" && e.category !== category) return false;
       if (paidBy !== "" && String(e.paidBy) !== String(paidBy)) return false;
       return true;
     });
-  }, [state.expenses, query, category, paidBy]);
+  }, [state.expenses, state.members, query, category, paidBy]);
 
   const balances = useMemo(
     () => computeBalances(state.members, state.expenses),
