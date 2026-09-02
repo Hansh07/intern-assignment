@@ -58,6 +58,16 @@ Keep this file in the repo and **commit it** with your fixes.
 
 ## Bug 6
 
+**How to reproduce:** In the Filters panel, select any member from the "Paid by" dropdown (e.g. "Aisha Khan" or "Ben Okonkwo"). The expense list becomes completely empty and states "No expenses match these filters", even though matching expenses exist.
+
+**What is wrong:** In `src/App.jsx`, the filtering condition `if (paidBy !== "" && e.paidBy !== paidBy) return false;` used strict inequality (`!==`) between `e.paidBy` (a `number` like `1`) and `paidBy` (a `string` from the `<select>` element like `"1"`). Because `1 !== "1"` is always `true`, all expenses were incorrectly filtered out.
+
+**What I changed:** Updated the comparison in `src/App.jsx` to `String(e.paidBy) !== String(paidBy)` to correctly compare IDs regardless of whether they are formatted as strings or numbers.
+
+---
+
+## Bug 7
+
 **How to reproduce:**
 
 **What is wrong:**
