@@ -134,4 +134,12 @@ Keep this file in the repo and **commit it** with your fixes.
 
 **What I changed:** Updated `formatDate()` in `src/lib/format.js` to parse string date inputs into `Date` instances and format them consistently using `toLocaleDateString("en-IN")`.
 
+## Bug 14
+
+**How to reproduce:** Add a member with multiple spaces in their name (e.g., `"  Aisha   Khan  "`). The avatar in the Balances panel renders with a missing initial or blank.
+
+**What is wrong:** `initials()` in `src/components/BalancesPanel.jsx` used plain `name.split(" ")` without trimming, producing empty elements for leading or consecutive whitespace.
+
+**What I changed:** Updated `initials()` in `src/components/BalancesPanel.jsx` to use `(name || "").trim().split(/\s+/)`, guaranteeing clean 2-letter uppercase initials regardless of whitespace variations.
+
 ---

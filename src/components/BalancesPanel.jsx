@@ -1,8 +1,9 @@
 import { formatMoney } from "../lib/money.js";
 
 function initials(name) {
-  return name
-    .split(" ")
+  return (name || "")
+    .trim()
+    .split(/\s+/)
     .map((p) => p[0])
     .join("")
     .slice(0, 2)
