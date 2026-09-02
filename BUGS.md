@@ -48,6 +48,16 @@ Keep this file in the repo and **commit it** with your fixes.
 
 ## Bug 5
 
+**How to reproduce:** In a scenario where a debtor owes the exact same amount that a creditor is owed (or when equal amounts are matched during settlement), check the "Settle up" panel. The transfer between them is omitted completely and does not appear in the suggested payments list.
+
+**What is wrong:** In `src/lib/settle.js`, the `while` loop had an `else` branch for when `d.amount === c.amount` that simply incremented the indices `i += 1; j += 1` without creating and pushing a transfer object into `transfers`.
+
+**What I changed:** Refactored the settlement loop in `src/lib/settle.js` to compute `payment = Math.min(d.amount, c.amount)`, record the transfer whenever `payment > 0`, decrement remaining amounts with clean 2-decimal precision, and advance each pointer when their balance reaches `<= 0.005`.
+
+---
+
+## Bug 6
+
 **How to reproduce:**
 
 **What is wrong:**
