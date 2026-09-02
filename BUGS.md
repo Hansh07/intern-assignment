@@ -118,4 +118,12 @@ Keep this file in the repo and **commit it** with your fixes.
 
 **What I changed:** Added `useEffect` in `ExpenseRow` to synchronize `draft` with `expense.amount`, added `onKeyDown` to blur/save on Enter key press, and reset `draft` to `String(expense.amount)` when blur validation fails.
 
+## Bug 12
+
+**How to reproduce:** If a member object has an `id` represented as a string (such as `"4"`), adding a new member generates an `id` of `"41"` rather than `5`.
+
+**What is wrong:** `nextMemberId()` in `src/state/store.js` did not cast `x.id` to `Number` during the reduce comparison, which sets `max` to a string and leads to string concatenation (`"4" + 1 = "41"`).
+
+**What I changed:** Updated `nextMemberId()` in `src/state/store.js` to cast `x.id` to `Number(x.id)` so the maximum ID is always numeric and increments correctly.
+
 ---
