@@ -18,6 +18,16 @@ Keep this file in the repo and **commit it** with your fixes.
 
 ## Bug 2
 
+**How to reproduce:** Filter expenses by selecting category "Travel" or searching "Uber". Click "Delete" on "Uber to airport" (or edit its amount). Instead of modifying "Uber to airport" (`id: e2`), the first item in the unfiltered array ("Groceries", `id: e1`) gets deleted or edited.
+
+**What is wrong:** `DELETE_EXPENSE` and `UPDATE_EXPENSE` were operating by array index (`action.index`). Because the displayed list is filtered and sorted, the array index in the view did not correspond to the index in `state.expenses`, causing data corruption by mutating the wrong item.
+
+**What I changed:** Changed `DELETE_EXPENSE` and `UPDATE_EXPENSE` in `src/state/store.js` to target items by unique `action.id` (`filter(e => e.id !== action.id)` and `map(e => e.id === action.id ? ... : e)`). Updated `ExpenseList.jsx` to pass `expense.id` to `onDelete` and `onUpdate`, used `key={expense.id}`, and updated `App.jsx` dispatch calls.
+
+---
+
+## Bug 3
+
 **How to reproduce:**
 
 **What is wrong:**
