@@ -28,6 +28,16 @@ Keep this file in the repo and **commit it** with your fixes.
 
 ## Bug 3
 
+**How to reproduce:** Inspect member balances with the demo data. Diya Patel (`id: 4`) paid $60 for "Uber to airport" (`id: e2`) which was split between Aisha (`id: 1`) and Ben (`id: 2`). Diya was not in the split (`splitWith: [1, 2]`), but Diya's balance was erroneously deducted $30 ($60 / 2).
+
+**What is wrong:** `computeBalances()` in `src/lib/balances.js` contained logic that subtracted `amount / splitWith.length` from `bal[exp.paidBy]` whenever the payer was not in `shares`. This directly violates the README specification ("Someone can put a cab on their card even if they did not ride. They should get that fare back in full. Only the people who used it should owe a share.").
+
+**What I changed:** Removed the invalid payer deduction check from `computeBalances()` in `src/lib/balances.js` so that the payer receives full credit for the payment, and only participants in the split are debited their calculated shares.
+
+---
+
+## Bug 4
+
 **How to reproduce:**
 
 **What is wrong:**
