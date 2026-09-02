@@ -126,4 +126,12 @@ Keep this file in the repo and **commit it** with your fixes.
 
 **What I changed:** Updated `nextMemberId()` in `src/state/store.js` to cast `x.id` to `Number(x.id)` so the maximum ID is always numeric and increments correctly.
 
+## Bug 13
+
+**How to reproduce:** When date strings (e.g., `"2026-03-12"`) are passed to `formatDate()`, they are displayed in raw unformatted ISO format (`"2026-03-12"`) rather than the application's standard formatted date string (`"12 Mar 2026"`).
+
+**What is wrong:** `formatDate()` in `src/lib/format.js` checked `if (typeof date === "string") return date.slice(0, 10);`, bypassing locale date formatting for string inputs.
+
+**What I changed:** Updated `formatDate()` in `src/lib/format.js` to parse string date inputs into `Date` instances and format them consistently using `toLocaleDateString("en-IN")`.
+
 ---
