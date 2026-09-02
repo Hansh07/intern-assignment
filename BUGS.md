@@ -110,4 +110,12 @@ Keep this file in the repo and **commit it** with your fixes.
 
 **What I changed:** Updated `submit()` in `src/components/AddExpenseForm.jsx` to clear `description` and `amount` on successful submission, and normalized the date parsing to local midnight (`${date}T00:00:00`) to prevent timezone date shifts.
 
+## Bug 11
+
+**How to reproduce:** In the Expenses list, click on the editable amount input of an expense, enter an invalid value (such as a negative number or non-numeric characters), and click outside (blur). The input remains displaying the invalid value rather than reverting to the saved amount. Also, pressing the "Enter" key does not commit the edit.
+
+**What is wrong:** `ExpenseRow` in `src/components/ExpenseList.jsx` only initialized `draft` on first render without syncing to `expense.amount`, lacked an `Enter` key trigger, and failed to reset `draft` when blur validation did not pass.
+
+**What I changed:** Added `useEffect` in `ExpenseRow` to synchronize `draft` with `expense.amount`, added `onKeyDown` to blur/save on Enter key press, and reset `draft` to `String(expense.amount)` when blur validation fails.
+
 ---

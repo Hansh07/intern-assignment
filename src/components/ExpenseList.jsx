@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatMoney } from "../lib/money.js";
 import { dateValue, formatDate } from "../lib/format.js";
 
 function initials(name) {
   return name
-    .split(" ")
+    .trim()
+    .split(/\s+/)
     .map((p) => p[0])
     .join("")
     .slice(0, 2)
@@ -14,6 +15,10 @@ function initials(name) {
 function ExpenseRow({ expense, memberMap, onDelete, onSaveAmount }) {
   const [draft, setDraft] = useState(String(expense.amount));
   const payer = memberMap[expense.paidBy];
+
+  useEffect(() => {
+    setDraft(String(expense.amount));
+  }, [expense.amount]);
 
   return (
     <article className="expense">
@@ -34,10 +39,17 @@ function ExpenseRow({ expense, memberMap, onDelete, onSaveAmount }) {
             className="edit-amount"
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.target.blur();
+              }
+            }}
             onBlur={() => {
               const n = Number(draft);
               if (Number.isFinite(n) && n > 0 && n !== Number(expense.amount)) {
                 onSaveAmount(n);
+              } else {
+                setDraft(String(expense.amount));
               }
             }}
             aria-label={`Edit amount for ${expense.description}`}
