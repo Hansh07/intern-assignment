@@ -78,6 +78,16 @@ Keep this file in the repo and **commit it** with your fixes.
 
 ## Bug 8
 
+**How to reproduce:** Add new expenses and refresh the browser page. The dates in the expense list fallback to raw string slicing instead of formatted locale dates (`toLocaleDateString("en-IN")`).
+
+**What is wrong:** In `src/state/store.js`, `loadState()` returned `JSON.parse(raw)` directly when retrieving cached state from `localStorage`. Because `JSON.stringify` converts `Date` instances into ISO string primitives, the retrieved expenses contained strings for `date` instead of JavaScript `Date` objects, failing `date instanceof Date` checks.
+
+**What I changed:** Updated `loadState()` in `src/state/store.js` to pass `JSON.parse(raw)` through `hydrate()`, ensuring all expense dates are restored as valid `Date` objects upon page reloads.
+
+---
+
+## Bug 9
+
 **How to reproduce:**
 
 **What is wrong:**
