@@ -88,10 +88,16 @@ Keep this file in the repo and **commit it** with your fixes.
 
 ## Bug 9
 
-**How to reproduce:**
+**How to reproduce:** 
+1. Log an expense of $100 split equally among 3 people. Each person was assigned $33.33, totaling $99.99, losing $0.01 from the group total.
+2. Enter custom percentage splits such as `33.33%`, `33.33%`, and `33.34%`. The form rejects submission with *"Percentages must add to 100"* due to IEEE 754 float representation `100.00000000000001`.
 
-**What is wrong:**
+**What is wrong:** 
+1. `splitEqual()` in `src/lib/money.js` performed simple division and fixed-point rounding without distributing remainder cents across participants.
+2. `percentsSumTo100()` in `src/lib/money.js` used strict equality `=== 100` rather than floating-point tolerance check.
 
-**What I changed:**
+**What I changed:** 
+1. Refactored `splitEqual()` and `splitByPercent()` in `src/lib/money.js` to allocate exact cent-level shares and distribute any remainder cents so the sum of individual shares always precisely equals the full bill amount.
+2. Updated `percentsSumTo100()` to use `Math.abs(sum - 100) < 0.01` to safely accommodate floating-point variations.
 
 ---
