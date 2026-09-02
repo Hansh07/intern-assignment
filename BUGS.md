@@ -100,4 +100,14 @@ Keep this file in the repo and **commit it** with your fixes.
 1. Refactored `splitEqual()` and `splitByPercent()` in `src/lib/money.js` to allocate exact cent-level shares and distribute any remainder cents so the sum of individual shares always precisely equals the full bill amount.
 2. Updated `percentsSumTo100()` to use `Math.abs(sum - 100) < 0.01` to safely accommodate floating-point variations.
 
+## Bug 10
+
+**How to reproduce:** 
+1. Fill in Description and Amount, then click "Save expense". The input values remain populated in the form fields instead of clearing.
+2. In non-UTC timezones, selecting a date like `2026-03-16` can shift to `15 Mar 2026` due to UTC midnight parsing.
+
+**What is wrong:** `submit()` in `src/components/AddExpenseForm.jsx` did not reset input state fields (`description`, `amount`) upon submission and parsed dates via `new Date(date)` which defaults to UTC.
+
+**What I changed:** Updated `submit()` in `src/components/AddExpenseForm.jsx` to clear `description` and `amount` on successful submission, and normalized the date parsing to local midnight (`${date}T00:00:00`) to prevent timezone date shifts.
+
 ---
