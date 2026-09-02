@@ -142,4 +142,12 @@ Keep this file in the repo and **commit it** with your fixes.
 
 **What I changed:** Updated `initials()` in `src/components/BalancesPanel.jsx` to use `(name || "").trim().split(/\s+/)`, guaranteeing clean 2-letter uppercase initials regardless of whitespace variations.
 
+## Bug 15
+
+**How to reproduce:** When filters are active (e.g. searching for a member or category), there was no quick way to reset all filters. Furthermore, entering a payer's name or category into the search box returned no results because search strictly queried the description field.
+
+**What is wrong:** `Filters.jsx` lacked a reset trigger when active filters were applied, and `App.jsx` filtered solely on `e.description`, ignoring expense category and payer names.
+
+**What I changed:** Added a dynamic "Reset filters" button in `src/components/Filters.jsx` when any filter is active, and expanded the search logic in `src/App.jsx` to match across description, category name, and payer name simultaneously.
+
 ---
