@@ -38,6 +38,16 @@ Keep this file in the repo and **commit it** with your fixes.
 
 ## Bug 4
 
+**How to reproduce:** Open the app and observe the Balances panel. Members who have paid more than their share and are in credit (e.g., Aisha Khan) are labeled in red as "owes $...", while members who owe the group are labeled in green as "is owed $...".
+
+**What is wrong:** In `src/components/BalancesPanel.jsx`, the logic for labeling balances was reversed. A positive balance (`bal > 0`) indicates money owed to the member (credit), and a negative balance (`bal < 0`) indicates debt owed by the member to the group.
+
+**What I changed:** Updated the condition in `src/components/BalancesPanel.jsx` so that `bal > 0.005` displays `"is owed $..."` with the `"owed"` class (green), and `bal < -0.005` displays `"owes $..."` with the `"owe"` class (red).
+
+---
+
+## Bug 5
+
 **How to reproduce:**
 
 **What is wrong:**
